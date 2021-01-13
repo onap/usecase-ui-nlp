@@ -1,0 +1,51 @@
+---
+project: 'usecase_ui_nlp'
+project_creation_date: '2021-01-13'
+project_category: ''
+lifecycle_state: 'Mature'
+project_lead: &onap_usecase_ui_nlp_ptl
+    name: 'Ran Xu'
+    email: 'xuranyjy@chinamobile.com'
+    id: 'cyuamber'
+    company: 'CMCC'
+    timezone: 'China/Beijing'
+primary_contact: *onap_usecase_ui_nlp_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.onap.org/projects/USECASEUI'
+    key: 'UUI'
+mailing_list:
+    type: 'groups.io'
+    url: 'lists.onap.org'
+    tag: '[sub-project-name]'
+realtime_discussion: ''
+meetings:
+    - type: 'zoom'
+      agenda: 'https://wiki.onap.org/pages/viewpage.action?pageId=8228204'
+      url: 'https://wiki.onap.org/display/DW/Usecase+UI+Project'
+      server: ''
+      channel: ''
+      repeats: 'weekly'
+      time: '02:00 UTC'
+repositories:
+    - usecase-ui/nlp
+committers:
+    - <<: *onap_usecase_ui_nlp_ptl
+    - name: 'Chuyi Guo'
+      email: 'guochuyi@chinamobile.com'
+      company: 'CMCC'
+      id: 'guochuyicmri'
+    - name: 'He Keguang'
+      email: 'hekeguang@chinamobile.com'
+      company: 'CMCC'
+      id: 'hekeguang'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://lists.onap.org/pipermail/onap-tsc'
+    changes:
+        - type: 'Addition'
+          name: 'Ran Xu'
+          link: 'https://wiki.onap.org/display/DW/Ran+Xu+-+Committer+Promotion+Request'
+        - type: 'Addition'
+          name: 'He Keguang'
+          link: 'https://wiki.onap.org/display/DW/He+Keguang+-+Committer+Promotion+Request'
