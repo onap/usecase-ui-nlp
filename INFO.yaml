@@ -42,10 +42,10 @@ committers:
 tsc:
     # yamllint disable rule:line-length
     approval: 'https://lists.onap.org/pipermail/onap-tsc'
-    changes:
-        - type: 'Addition'
-          name: 'Ran Xu'
-          link: 'https://wiki.onap.org/display/DW/Ran+Xu+-+Committer+Promotion+Request'
-        - type: 'Addition'
-          name: 'He Keguang'
-          link: 'https://wiki.onap.org/display/DW/He+Keguang+-+Committer+Promotion+Request'
+    # changes:
+    #     - type: 'Addition'
+    #       name: 'Ran Xu'
+    #       link: 'https://wiki.onap.org/display/DW/Ran+Xu+-+Committer+Promotion+Request'
+    #     - type: 'Addition'
+    #       name: 'He Keguang'
+    #       link: 'https://wiki.onap.org/display/DW/He+Keguang+-+Committer+Promotion+Request'
