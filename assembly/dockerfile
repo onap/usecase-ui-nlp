@@ -1,0 +1,53 @@
+FROM tensorflow/serving:latest
+
+WORKDIR /home/run/
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install python3.7.3
+RUN DEBIAN_FRONTEND=noninteractive apt-get install wget -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install make -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install gcc -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install zlib* -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install libffi-dev -y
+RUN  DEBIAN_FRONTEND=noninteractive apt-get install openssl -y
+#RUN DEBIAN_FRONTEND=noninteractive wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tgz
+
+WORKDIR /home/run/
+RUN wget http://www.openssl.org/source/openssl-1.0.2j.tar.gz
+RUN tar -zxvf openssl-1.0.2j.tar.gz
+WORKDIR /home/run/openssl-1.0.2j
+RUN ./config --prefix=/usr/local/lab/openssl-1.0.2j shared no-zlib
+RUN make 
+RUN make install
+RUN ln -s /usr/local/lab/openssl-1.0.2j/lib/libssl.so.1.0.0 /usr/lib/libssl.so.1.0.0
+RUN ln -s /usr/local/lab/openssl-1.0.2j/lib/libcrypto.so.1.0.0 /usr/lib/libcrypto.so.1.0.0
+
+
+WORKDIR /home/run/
+COPY Python-3.7.3.tar.gz /home/run/
+RUN tar -zxvf Python-3.7.3.tar.gz
+WORKDIR /home/run/Python-3.7.3/
+#RUN DEBIAN_FRONTEND=noninteractive ./configure --with-ssl
+#RUN rm /home/run/Python-3.7.3/Modules/Setup
+#COPY Setup /home/run/Python-3.7.3/Modules/Setup
+RUN make
+RUN make install
+RUN ln -s /usr/local/bin/python3 /usr/bin/python
+RUN ln -s /usr/local/bin/pip3 /usr/bin/pip
+
+
+WORKDIR /home/run/
+RUN DEBIAN_FRONTEND=noninteractive apt-get install curl -y
+RUN DEBIAN_FRONTEND=noninteractive curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN DEBIAN_FRONTEND=noninteractive python get-pip.py
+
+COPY requirements /home/run/requirements
+RUN DEBIAN_FRONTEND=noninteractive  pip install -r requirements
+
+ADD nlp.tar.gz /home/run/
+
+COPY run.sh /home/run/run.sh
+
+ENTRYPOINT /home/run/run.sh
+
