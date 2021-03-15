@@ -1,38 +1,28 @@
+#!/usr/bin/env python
+# coding: utf-8
 
-    #!/usr/bin/env python
-    # coding: utf-8
-
-    # auther = 'liuzhiyong'
-    # date = 20201204
+# auther = 'liuzhiyong'
+# date = 20201204
 
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 import json
-import datetime
-import threading
-import time
-from flask import Flask, abort, request, jsonify
-from concurrent.futures import ThreadPoolExecutor
 
 import collections
 import math
-import os
-import random
-import modeling
-import optimization
 import tokenization
 import six
 import tensorflow as tf
-import sys
 import requests
 
-from global_setting import *
+from global_setting import _improve_answer_span
 
 version_2_with_negative = True
 
-def get_squad_feature_result(title,text,tokenizer,question, url):
+
+def get_squad_feature_result(title, text, tokenizer, question, url):
 
     def make_json(title, text, question):
         res = {}
@@ -59,7 +49,6 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
         res['data'].append(data_inside.copy())
         return json.dumps(res)
 
-
     def _compute_softmax(scores):
         """Compute softmax probability over raw logits."""
         if not scores:
@@ -83,7 +72,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
         return probs
 
     def get_final_text(pred_text, orig_text, do_lower_case):
-  
+
         def _strip_spaces(text):
             ns_chars = []
             ns_to_s_map = collections.OrderedDict()
@@ -152,7 +141,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
         return output_text
 
     def _get_best_indexes(logits, n_best_size):
-      
+
         index_and_score = sorted(enumerate(logits), key=lambda x: x[1], reverse=True)
 
         best_indexes = []
@@ -164,8 +153,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
 
     RawResult = collections.namedtuple("RawResult", ["unique_id", "start_logits", "end_logits"])
 
-    def write_predictions(all_examples, all_features, all_results, n_best_size,
-                        max_answer_length, do_lower_case):
+    def write_predictions(all_examples, all_features, all_results, n_best_size, max_answer_length, do_lower_case):
         """Write final predictions to the json file and log-odds of null if needed."""
 
         example_index_to_features = collections.defaultdict(list)
@@ -236,19 +224,19 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
 
             if version_2_with_negative:
                 prelim_predictions.append(
-                _PrelimPrediction(
-                    feature_index=min_null_feature_index,
-                    start_index=0,
-                    end_index=0,
-                    start_logit=null_start_logit,
-                    end_logit=null_end_logit))
+                    _PrelimPrediction(
+                        feature_index=min_null_feature_index,
+                        start_index=0,
+                        end_index=0,
+                        start_logit=null_start_logit,
+                        end_logit=null_end_logit))
             prelim_predictions = sorted(
-                    prelim_predictions,
-                    key=lambda x: (x.start_logit + x.end_logit),
-                    reverse=True)
+                prelim_predictions,
+                key=lambda x: (x.start_logit + x.end_logit),
+                reverse=True)
 
             _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
-                    "NbestPrediction", ["text", "start_logit", "end_logit"])
+                "NbestPrediction", ["text", "start_logit", "end_logit"])
 
             seen_predictions = {}
             nbest = []
@@ -282,10 +270,10 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                     seen_predictions[final_text] = True
 
                 nbest.append(
-                        _NbestPrediction(
-                                text=final_text,
-                                start_logit=pred.start_logit,
-                                end_logit=pred.end_logit))
+                    _NbestPrediction(
+                        text=final_text,
+                        start_logit=pred.start_logit,
+                        end_logit=pred.end_logit))
 
             # if we didn't inlude the empty option in the n-best, inlcude it
             if version_2_with_negative:
@@ -299,7 +287,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
             # just create a nonce prediction in this case to avoid failure.
             if not nbest:
                 nbest.append(
-                        _NbestPrediction(text="", start_logit=0.0, end_logit=0.0))
+                    _NbestPrediction(text="", start_logit=0.0, end_logit=0.0))
 
             assert len(nbest) >= 1
 
@@ -339,30 +327,28 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
             all_nbest_json[example.qas_id] = nbest_json
         return all_predictions
 
-
     def create_int_feature(values):
 
         feature = tf.train.Feature(
             int64_list=tf.train.Int64List(value=list(values)))
         return feature
 
-
     class InputFeatures(object):
         """A single set of features of data."""
 
         def __init__(self,
-                    unique_id,
-                    example_index,
-                    doc_span_index,
-                    tokens,
-                    token_to_orig_map,
-                    token_is_max_context,
-                    input_ids,
-                    input_mask,
-                    segment_ids,
-                    start_position=None,
-                    end_position=None,
-                    is_impossible=None):
+                     unique_id,
+                     example_index,
+                     doc_span_index,
+                     tokens,
+                     token_to_orig_map,
+                     token_is_max_context,
+                     input_ids,
+                     input_mask,
+                     segment_ids,
+                     start_position=None,
+                     end_position=None,
+                     is_impossible=None):
             self.unique_id = unique_id
             self.example_index = example_index
             self.doc_span_index = doc_span_index
@@ -413,7 +399,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
         return cur_span_index == best_span_index
 
     def convert_examples_to_features(examples, tokenizer, max_seq_length,
-                                    doc_stride, max_query_length, is_training):
+                                     doc_stride, max_query_length, is_training):
         """Loads a data file into a list of `InputBatch`s."""
 
         unique_id = 1000000000
@@ -487,7 +473,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                     token_to_orig_map[len(tokens)] = tok_to_orig_index[split_token_index]
 
                     is_max_context = _check_is_max_context(doc_spans, doc_span_index,
-                                                        split_token_index)
+                                                           split_token_index)
                     token_is_max_context[len(tokens)] = is_max_context
                     tokens.append(all_doc_tokens[split_token_index])
                     segment_ids.append(1)
@@ -518,8 +504,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                     doc_start = doc_span.start
                     doc_end = doc_span.start + doc_span.length - 1
                     out_of_span = False
-                    if not (tok_start_position >= doc_start and
-                            tok_end_position <= doc_end):
+                    if not (tok_start_position >= doc_start and tok_end_position <= doc_end):
                         out_of_span = True
                     if out_of_span:
                         start_position = 0
@@ -574,22 +559,21 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                     is_impossible=example.is_impossible)
 
                 # Run callback
-                
+
                 result.append(feature)
                 unique_id += 1
         return result
 
     class SquadExample(object):
 
-
         def __init__(self,
-                    qas_id,
-                    question_text,
-                    doc_tokens,
-                    orig_answer_text=None,
-                    start_position=None,
-                    end_position=None,
-                    is_impossible=False):
+                     qas_id,
+                     question_text,
+                     doc_tokens,
+                     orig_answer_text=None,
+                     start_position=None,
+                     end_position=None,
+                     is_impossible=False):
             self.qas_id = qas_id
             self.question_text = question_text
             self.doc_tokens = doc_tokens
@@ -614,8 +598,6 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
             if self.start_position:
                 s += ", is_impossible: %r" % (self.is_impossible)
             return s
-
-
 
     def read_squad_examples(input_file, is_training):
         """Read a SQuAD json file into a list of SquadExample."""
@@ -654,7 +636,6 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                     is_impossible = False
                     if is_training:
 
-        
                         if (len(qa["answers"]) != 1) and (not is_impossible):
                             raise ValueError(
                                 "For training, each question should have exactly 1 answer.")
@@ -664,8 +645,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                             answer_offset = answer["answer_start"]
                             answer_length = len(orig_answer_text)
                             start_position = char_to_word_offset[answer_offset]
-                            end_position = char_to_word_offset[answer_offset + answer_length -
-                                                1]
+                            end_position = char_to_word_offset[answer_offset + answer_length - 1]
                             # Only add answers where the text can be exactly recovered from the
                             # document. If this CAN'T happen it's likely due to weird Unicode
                             # stuff so we will just skip the example.
@@ -678,7 +658,7 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
                                 tokenization.whitespace_tokenize(orig_answer_text))
                             if actual_text.find(cleaned_answer_text) == -1:
                                 tf.logging.warning("Could not find answer: '%s' vs. '%s'",
-                                                    actual_text, cleaned_answer_text)
+                                                   actual_text, cleaned_answer_text)
                                 continue
                         else:
                             start_position = -1
@@ -697,27 +677,24 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
 
         return examples
 
+    def get_result(title, text, question, url):
 
-    def get_result(title,text,question,url):
-     
-        data = make_json(title,text,question)
-      
+        data = make_json(title, text, question)
 
-        examples = read_squad_examples(data,False)
-
+        examples = read_squad_examples(data, False)
 
         predict_files = convert_examples_to_features(
-                examples=examples,
-                tokenizer=tokenizer,
-                max_seq_length=512,
-                doc_stride=128,
-                max_query_length=100,
-                is_training=False,
+            examples=examples,
+            tokenizer=tokenizer,
+            max_seq_length=512,
+            doc_stride=128,
+            max_query_length=100,
+            is_training=False,
         )
-       
+
         headers = {"content-type": "application/json"}
         all_results = []
-        for predict_file in predict_files: 
+        for predict_file in predict_files:
             features = {}
             features["unique_ids"] = predict_file.unique_id
             features["input_mask"] = predict_file.input_mask
@@ -725,22 +702,20 @@ def get_squad_feature_result(title,text,tokenizer,question, url):
             features["input_ids"] = predict_file.input_ids
             data_list = []
             data_list.append(features)
-        
+
             data = json.dumps({"instances": data_list})
-    
+
             json_response = requests.post(url, data=data, headers=headers)
 
-       
             x = json.loads(json_response.text)
-          
+
             all_results.append(
                 RawResult(
                     unique_id=predict_file.unique_id,
                     start_logits=x['predictions'][0]['start_logits'],
                     end_logits=x['predictions'][0]['end_logits']))
-       
-        result = write_predictions(examples, predict_files, all_results,20, 64,True)
+
+        result = write_predictions(examples, predict_files, all_results, 20, 64, True)
         return result
 
     return get_result(title, text, question, url)
-

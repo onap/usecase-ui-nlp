@@ -1,4 +1,5 @@
-# Copyright 2017 CTC, Inc.
+#!/bin/bash
+# Copyright 2017 , Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Micro service of NLP.
-
-1. Code structure guide
-   ./         project files
-   ./assembly   docker related scripts
-   ./logs     log file
-   ./scripts      NLP service
-       
-   
+pip install -r requirements.txt

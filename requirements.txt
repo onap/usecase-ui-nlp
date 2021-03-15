@@ -1,0 +1,4 @@
+pytest
+entrypoints==0.3      
+Flask==1.1.1  
+coverage

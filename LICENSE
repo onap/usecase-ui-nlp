@@ -13,11 +13,3 @@
 # limitations under the License.
 
 # Micro service of NLP.
-
-1. Code structure guide
-   ./         project files
-   ./assembly   docker related scripts
-   ./logs     log file
-   ./scripts      NLP service
-       
-   
