@@ -14,6 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-sh start.sh 33011
+
+cd /home/run/
+wget https://github.com/google-research/bert/archive/master.zip
+wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
+
+unzip master.zip
+unzip uncased_L-12_H-768_A-12.zip
+rm master.zip uncased_L-12_H-768_A-12.zip
+mv scripts bert-master/
+cd /home/run/bert-master/
+
 nohup python -u api_squad_online.py 33011 > online.log 2>&1 &
 nohup python -u api_squad_offline.py 33012 > offline.log 2>&1 &

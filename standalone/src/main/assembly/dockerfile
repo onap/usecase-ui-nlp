@@ -1,0 +1,21 @@
+FROM tensorflow/serving:latest
+
+WORKDIR /home/run/
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install wget -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install unzip -y
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install python3-pip python3-dev build-essential -y
+RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/pip3 /usr/bin/pip
+
+COPY requirements /home/run/requirements
+RUN DEBIAN_FRONTEND=noninteractive pip install -r requirements
+
+COPY scripts /home/run/
+
+COPY run.sh /home/run/run.sh
+
+ENTRYPOINT /home/run/run.sh
+
