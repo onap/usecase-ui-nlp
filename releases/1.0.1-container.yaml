@@ -1,0 +1,10 @@
+distribution_type: 'container'
+container_release_tag: '1.0.1'
+project: 'uui-nlp'
+container_pull_registry: nexus3.onap.org:10003
+container_push_registry: nexus3.onap.org:10002
+log_dir: 'uui-nlp-master-docker-java-version-shell-daily/206/'
+ref: '5ff788c006f00be38b80edf80945f052ffe4a62b'
+containers:
+    - name: 'uui/nlp'
+      version: '1.0.1-STAGING-20200320T085153'
