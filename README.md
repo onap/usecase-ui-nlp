@@ -19,5 +19,3 @@
    ./assembly   docker related scripts
    ./logs     log file
    ./scripts      NLP service
-       
-   
