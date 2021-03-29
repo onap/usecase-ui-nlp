@@ -28,7 +28,7 @@
     <description>distribute binary files and docker image for usecase-ui nlp</description>
 
     <properties>
-        <usecaseui.version>3.0.1</usecaseui.version>
+        <usecaseui.version>1.0.0</usecaseui.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
