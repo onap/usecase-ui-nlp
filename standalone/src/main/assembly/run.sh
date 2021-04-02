@@ -26,4 +26,4 @@ mv scripts bert-master/
 cd /home/run/bert-master/
 
 nohup python -u api_squad_online.py 33011 > online.log 2>&1 &
-nohup python -u api_squad_offline.py 33012 > offline.log 2>&1 &
+python -u api_squad_offline.py 33012 > offline.log 2>&1
