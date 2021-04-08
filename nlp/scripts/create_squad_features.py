@@ -17,7 +17,7 @@ import six
 import tensorflow as tf
 import requests
 
-from global_setting import _improve_answer_span
+from api_squad import _improve_answer_span
 
 version_2_with_negative = True
 

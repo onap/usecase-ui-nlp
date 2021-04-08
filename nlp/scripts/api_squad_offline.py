@@ -34,10 +34,10 @@ from api_squad import model_fn_builder
 from api_squad import FeatureWriter
 from api_squad import convert_examples_to_features
 from api_squad import input_fn_builder
+from api_squad import validate_flags_or_throw
+from api_squad import read_squad_examples
 
 from global_setting import CUDA_VISIBLE_DEVICES
-from global_setting import validate_flags_or_throw
-from global_setting import read_squad_examples
 from global_setting import FLAGS_bert_config_file, FLAGS_vocab_file, FLAGS_init_checkpoint_squad, questions
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"

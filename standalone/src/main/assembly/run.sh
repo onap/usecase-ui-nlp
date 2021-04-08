@@ -22,7 +22,7 @@ wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-
 unzip master.zip
 unzip uncased_L-12_H-768_A-12.zip
 rm master.zip uncased_L-12_H-768_A-12.zip
-mv scripts bert-master/
+cp scripts/* bert-master/
 cd /home/run/bert-master/
 
 nohup python -u api_squad_online.py 33011 > online.log 2>&1 &
