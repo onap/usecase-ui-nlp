@@ -1,4 +1,6 @@
 pytest
-entrypoints==0.3      
-Flask==1.1.1  
-coverage
+entrypoints==0.3
+Flask==1.1.1
+coverage==4.2
+six==1.12.0
+pandas==0.24.2
