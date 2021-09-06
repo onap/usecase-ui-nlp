@@ -18,11 +18,11 @@
     <parent>
         <groupId>org.onap.usecase-ui.nlp</groupId>
         <artifactId>usecase-ui-nlp-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 	<groupId>org.onap.usecase-ui.nlp</groupId>
     <artifactId>usecase-ui-nlp</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>usecase-ui-nlp</name>
     <packaging>pom</packaging>
     <description>usecase-ui nlp</description>
