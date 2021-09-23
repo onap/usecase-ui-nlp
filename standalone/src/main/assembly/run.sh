@@ -27,5 +27,6 @@ cd /home/run/bert-master/
 
 nohup python -u api_squad_online.py 33011 > online.log 2>&1 &
 nohup python -u api_squad_offline.py 33012 > offline.log 2>&1 &
+nohup python -u upload.py 33013 > upload.log 2>&1 &
 
 /usr/bin/tf_serving_entrypoint.sh
