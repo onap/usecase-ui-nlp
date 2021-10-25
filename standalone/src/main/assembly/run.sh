@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-cd /home/run/
+cd /home/uuihome/uui/
 wget https://github.com/google-research/bert/archive/master.zip
 wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
 
@@ -23,8 +23,9 @@ unzip master.zip
 unzip uncased_L-12_H-768_A-12.zip
 rm master.zip uncased_L-12_H-768_A-12.zip
 cp scripts/* bert-master/
-cd /home/run/bert-master/
+cd /home/uuihome/uui/bert-master/
 
+mkdir upload
 nohup python -u api_squad_online.py 33011 > online.log 2>&1 &
 nohup python -u api_squad_offline.py 33012 > offline.log 2>&1 &
 nohup python -u upload.py 33013 > upload.log 2>&1 &

@@ -1,6 +1,12 @@
 FROM tensorflow/serving:latest
 
-WORKDIR /home/run/
+RUN mkdir -p /home/uuihome/uui
+
+WORKDIR /home/uuihome/uui
+
+RUN groupadd uui -g 1000
+
+RUN useradd -u 1000 -d /home/uuihome/uui -g uui -s /bin/bash uui
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install wget -y
@@ -10,12 +16,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install python3-pip python3-dev build
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
 
-COPY requirements /home/run/requirements
+COPY requirements /home/uuihome/uui/requirements
 RUN DEBIAN_FRONTEND=noninteractive pip install -r requirements
+COPY scripts /home/uuihome/uui/scripts
+COPY run.sh /home/uuihome/uui/run.sh
 
-COPY scripts /home/run/scripts
-
-COPY run.sh /home/run/run.sh
-
-ENTRYPOINT /home/run/run.sh
-
+RUN chown -R uui:uui /home/uuihome/uui
+USER uui
+ENTRYPOINT /home/uuihome/uui/run.sh
