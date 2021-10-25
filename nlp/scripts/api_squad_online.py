@@ -13,7 +13,7 @@ import sys
 from flask import Flask, abort, request, jsonify
 
 import os
-from global_setting import questions, tokenizer_ch, CUDA_VISIBLE_DEVICES
+from global_setting import tokenizer_ch, CUDA_VISIBLE_DEVICES
 from create_squad_features import get_squad_feature_result
 
 
@@ -38,6 +38,7 @@ class AI2Flask:
                     except:
                         title = 'Not available'
                     text_origin = request.json['text']
+                    questions = request.json['questions']
 
                     if len(text_origin) > 800:
                         text = text_origin[:800]
