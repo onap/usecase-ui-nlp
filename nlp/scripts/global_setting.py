@@ -21,9 +21,9 @@ CUDA_VISIBLE_DEVICES = "2"
 questions = ['Communication Service Name', 'Max Number of UEs', 'Data Rate Downlink', 'Latency', 'Data Rate Uplink', 'Resource Sharing Level', 'Mobility', 'Area']
 
 # Configuration file
-FLAGS_bert_config_file = '/home/run/uncased_L-12_H-768_A-12/bert_config.json'
-FLAGS_vocab_file = '/home/run/uncased_L-12_H-768_A-12/vocab.txt'
-FLAGS_init_checkpoint_squad = '/home/run/uncased_L-12_H-768_A-12/bert_model.ckpt'
+FLAGS_bert_config_file = '/home/uuihome/uui/uncased_L-12_H-768_A-12/bert_config.json'
+FLAGS_vocab_file = '/home/uuihome/uui/uncased_L-12_H-768_A-12/vocab.txt'
+FLAGS_init_checkpoint_squad = '/home/uuihome/uui/uncased_L-12_H-768_A-12/bert_model.ckpt'
 
 max_seq_length = 512
 
