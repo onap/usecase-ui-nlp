@@ -3,8 +3,8 @@ container_release_tag: '1.0.0'
 project: 'usecase-ui-nlp'
 container_pull_registry: nexus3.onap.org:10003
 container_push_registry: nexus3.onap.org:10002
-log_dir: 'usecase-ui-nlp-master-docker-java-daily/184/'
-ref: '9f672413bbc463290852bbe861028dacc9936dca'
+log_dir: 'usecase-ui-nlp-master-docker-java-daily/239/'
+ref: 'd0476be3c0aff4bd0b7dee589050248a817549c0'
 containers:
     - name: 'usecase-ui-nlp'
-      version: '1.0.0-STAGING-20210905T235036Z'
+      version: '1.0.0-STAGING-20211102T234848Z'
