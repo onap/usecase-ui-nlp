@@ -22,6 +22,7 @@ RUN groupadd uui -g 1000 && \
     rm master.zip uncased_L-12_H-768_A-12.zip && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip && \
+    pip install --upgrade setuptools && \
     pip install --no-cache-dir -r requirements.txt && \
     DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y \
       build-essential \
