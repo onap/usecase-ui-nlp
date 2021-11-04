@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2016-2017 ZTE Corporation.
+# Copyright 2021 Orange.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,19 +16,11 @@
 # limitations under the License.
 #
 
-cd /home/uuihome/uui/
-wget https://github.com/google-research/bert/archive/master.zip
-wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
+cd /home/uuihome/uui/bert-master/ || exit
 
-unzip master.zip
-unzip uncased_L-12_H-768_A-12.zip
-rm master.zip uncased_L-12_H-768_A-12.zip
-cp scripts/* bert-master/
-cd /home/uuihome/uui/bert-master/
-
-mkdir upload
-nohup python -u api_squad_online.py 33011 > online.log 2>&1 &
-nohup python -u api_squad_offline.py 33012 > offline.log 2>&1 &
-nohup python -u upload.py 33013 > upload.log 2>&1 &
+mkdir -p upload
+nohup sh -c 'python -u api_squad_online.py 33011 2>&1 | tee online.log' | tee nohup.out &
+nohup sh -c 'python -u api_squad_offline.py 33012 2>&1 | tee offline.log' | tee nohup.out &
+nohup sh -c 'python -u upload.py 33013 2>&1 | tee upload.log' | tee nohup.out &
 
 /usr/bin/tf_serving_entrypoint.sh
