@@ -5,13 +5,14 @@
 # date = 20210918
 
 
-from flask import Flask, request, render_template
+from flask import Flask, request
 import zipfile
 import shutil
 import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'upload/'
+
 
 @app.route("/uploader", methods=["POST"])
 def uploader():
@@ -21,6 +22,7 @@ def uploader():
         print(f.filename)
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
         return "ok"
+
 
 @app.route("/unzipFile/<fileName>", methods=["GET"])
 def unzipFile(fileName):
@@ -35,6 +37,7 @@ def unzipFile(fileName):
     zip_file.close()
     return parentDir
 
+
 @app.route("/deleteFile/<fileName>", methods=["GET"])
 def deleteFile(fileName):
     path = os.path.join(app.config['UPLOAD_FOLDER'], fileName)
@@ -46,6 +49,7 @@ def deleteFile(fileName):
             return "ok"
         return "ok"
     return "error: no such file"
-    
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=33013)
