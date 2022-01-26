@@ -4,9 +4,9 @@ project_creation_date: '2021-01-13'
 project_category: ''
 lifecycle_state: 'Mature'
 project_lead: &onap_usecase_ui_nlp_ptl
-    name: 'Ran Xu'
-    email: 'xuranyjy@chinamobile.com'
-    id: 'cyuamber'
+    name: 'Keguang He'
+    email: 'hekeguang@chinamobile.com'
+    id: 'hekeguang'
     company: 'CMCC'
     timezone: 'China/Beijing'
 primary_contact: *onap_usecase_ui_nlp_ptl
