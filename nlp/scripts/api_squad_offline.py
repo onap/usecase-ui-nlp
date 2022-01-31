@@ -62,7 +62,7 @@ def serving_input_fn():
 
 def main(FLAGS_output_dir, FLAGS_init_checkpoint_squad, FLAGS_export_dir, FLAGS_predict_file=None, FLAGS_train_file=None, FLAGS_do_predict=False,
          FLAGS_do_train=False, FLAGS_train_batch_size=16, FLAGS_predict_batch_size=8, FLAGS_learning_rate=5e-5, FLAGS_num_train_epochs=3.0,
-         FLAGS_max_answer_length=100, FLAGS_max_query_length=64, FLAGS_version_2_with_negative=False,questions=[]):
+         FLAGS_max_answer_length=100, FLAGS_max_query_length=64, FLAGS_version_2_with_negative=False, questions=[]):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     bert_config = modeling.BertConfig.from_json_file(FLAGS_bert_config_file)
@@ -226,7 +226,7 @@ class AI2Flask:
 
                     task = p.submit(main, FLAGS_output_dir, FLAGS_init_checkpoint_squad, FLAGS_export_dir, FLAGS_predict_file, FLAGS_train_file, FLAGS_do_predict,
                                     FLAGS_do_train, FLAGS_train_batch_size, FLAGS_predict_batch_size, FLAGS_learning_rate, FLAGS_num_train_epochs,
-                                    FLAGS_max_answer_length, FLAGS_max_query_length, FLAGS_version_2_with_negative,questions)
+                                    FLAGS_max_answer_length, FLAGS_max_query_length, FLAGS_version_2_with_negative, questions)
                     threads_mapping[task_id] = task
 
                     return jsonify({"message": "Task submitted successfully", "status": "0"})
