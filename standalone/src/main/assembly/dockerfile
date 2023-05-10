@@ -22,8 +22,8 @@ RUN groupadd uui -g 1000 && \
     unzip master.zip && \
     unzip uncased_L-12_H-768_A-12.zip && \
     rm master.zip uncased_L-12_H-768_A-12.zip && \
-    ln -s /usr/bin/python3 /usr/bin/python && \
-    ln -s /usr/bin/pip3 /usr/bin/pip && \
+    ln -sf /usr/bin/python3 /usr/bin/python && \
+    ln -sf /usr/bin/pip3 /usr/bin/pip && \
     pip install --upgrade setuptools && \
     pip install wheel && \
     pip install torch==1.10.1 torchvision==0.11.2+cpu torchaudio==0.10.1 --extra-index-url https://download.pytorch.org/whl/cpu && \
