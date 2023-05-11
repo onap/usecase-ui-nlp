@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM tensorflow/serving:latest
+FROM tensorflow/serving:2.10.0-rc3
 
 WORKDIR /home/uuihome/uui
 
