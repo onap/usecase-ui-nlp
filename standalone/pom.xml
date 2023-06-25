@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.onap.usecase-ui.nlp</groupId>
         <artifactId>usecase-ui-nlp-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>usecase-ui-nlp-standalone</artifactId>
@@ -28,7 +28,7 @@
     <description>distribute binary files and docker image for usecase-ui nlp</description>
 
     <properties>
-        <usecaseui.version>1.0.0</usecaseui.version>
+        <usecaseui.version>1.1.0</usecaseui.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
