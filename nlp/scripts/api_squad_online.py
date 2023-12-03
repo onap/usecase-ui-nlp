@@ -47,7 +47,9 @@ class AI2Flask:
 
                     result = {}
                     for ques in questions:
-                        tmp = get_squad_feature_result(title=title, text=text, tokenizer=tokenizer_ch, question=[ques], url='http://localhost:8502/v1/models/predict:predict')
+                        tmp = get_squad_feature_result(title=title, text=text, tokenizer=tokenizer_ch, question=[ques], url='http://localhost:8502/v1/models/predict:predict') #服务器 URI： http://服务器地址:端口号/v1/models/模型名:predict 解释一下，v1是版本号（v2,v3等等）
+
+
                         result[ques] = dict(tmp)[ques]
 
                     print('finished!!')
