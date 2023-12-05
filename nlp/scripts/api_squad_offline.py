@@ -13,8 +13,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import os
 import random
-import modeling
-import tokenization
+import bert.modeling
+import bert.tokenization
 import tensorflow as tf
 import sys
 
@@ -63,28 +63,28 @@ def serving_input_fn():
 def main(FLAGS_output_dir, FLAGS_init_checkpoint_squad, FLAGS_export_dir, FLAGS_predict_file=None, FLAGS_train_file=None, FLAGS_do_predict=False,
          FLAGS_do_train=False, FLAGS_train_batch_size=16, FLAGS_predict_batch_size=8, FLAGS_learning_rate=5e-5, FLAGS_num_train_epochs=3.0,
          FLAGS_max_answer_length=100, FLAGS_max_query_length=64, FLAGS_version_2_with_negative=False, questions=[]):
-    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 
-    bert_config = modeling.BertConfig.from_json_file(FLAGS_bert_config_file)
+    bert_config = bert.modeling.BertConfig.from_json_file(FLAGS_bert_config_file)
 
     validate_flags_or_throw(bert_config)
 
-    tf.gfile.MakeDirs(FLAGS_output_dir)
+    tf.io.gfile.makedirs(FLAGS_output_dir)
 
-    tokenizer = tokenization.FullTokenizer(
+    tokenizer = bert.tokenization.FullTokenizer(
         vocab_file=FLAGS_vocab_file, do_lower_case=FLAGS_do_lower_case)
 
     tpu_cluster_resolver = None
     if FLAGS_use_tpu and FLAGS_tpu_name:
-        tpu_cluster_resolver = tf.contrib.cluster_resolver.TPUClusterResolver(
+        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
             FLAGS_tpu_name, zone=FLAGS_tpu_zone, project=FLAGS_gcp_project)
-    is_per_host = tf.contrib.tpu.InputPipelineConfig.PER_HOST_V2
-    run_config = tf.contrib.tpu.RunConfig(
+    is_per_host = tf.compat.v1.estimator.tpu.InputPipelineConfig.PER_HOST_V2
+    run_config = tf.compat.v1.estimator.tpu.RunConfig(
         cluster=tpu_cluster_resolver,
         master=FLAGS_master,
         model_dir=FLAGS_output_dir,
         save_checkpoints_steps=FLAGS_save_checkpoints_steps,
-        tpu_config=tf.contrib.tpu.TPUConfig(
+        tpu_config=tf.compat.v1.estimator.tpu.TPUConfig(
             iterations_per_loop=FLAGS_iterations_per_loop,
             num_shards=FLAGS_num_tpu_cores,
             per_host_input_for_training=is_per_host))
@@ -116,7 +116,7 @@ def main(FLAGS_output_dir, FLAGS_init_checkpoint_squad, FLAGS_export_dir, FLAGS_
 
     # If TPU is not available, this will fall back to normal Estimator on CPU
     # or GPU.
-    estimator = tf.contrib.tpu.TPUEstimator(
+    estimator = tf.compat.v1.estimator.tpu.TPUEstimator(
         use_tpu=FLAGS_use_tpu,
         model_fn=model_fn,
         config=run_config,
@@ -139,11 +139,11 @@ def main(FLAGS_output_dir, FLAGS_init_checkpoint_squad, FLAGS_export_dir, FLAGS_
             output_fn=train_writer.process_feature)
         train_writer.close()
 
-        tf.logging.info("***** Running training *****")
-        tf.logging.info("  Num orig examples = %d", len(train_examples))
-        tf.logging.info("  Num split examples = %d", train_writer.num_features)
-        tf.logging.info("  Batch size = %d", FLAGS_train_batch_size)
-        tf.logging.info("  Num steps = %d", num_train_steps)
+        tf.compat.v1.logging.info("***** Running training *****")
+        tf.compat.v1.logging.info("  Num orig examples = %d", len(train_examples))
+        tf.compat.v1.logging.info("  Num split examples = %d", train_writer.num_features)
+        tf.compat.v1.logging.info("  Batch size = %d", FLAGS_train_batch_size)
+        tf.compat.v1.logging.info("  Num steps = %d", num_train_steps)
         del train_examples
 
         train_input_fn = input_fn_builder(
@@ -152,7 +152,8 @@ def main(FLAGS_output_dir, FLAGS_init_checkpoint_squad, FLAGS_export_dir, FLAGS_
             is_training=True,
             drop_remainder=True)
         estimator.train(input_fn=train_input_fn, max_steps=num_train_steps)
-        estimator._export_to_tpu = False
+        estimator._export_to_tpu =False
+   
         estimator.export_savedmodel(FLAGS_export_dir, serving_input_fn)
     return 'success'
 
@@ -211,7 +212,7 @@ class AI2Flask:
                 try:
                     FLAGS_version_2_with_negative = request.json['FLAGS_version_2_with_negative']
                 except:
-                    FLAGS_version_2_with_negative = True
+                    FLAGS_version_2_with_negative = False
 
                 try:
                     FLAGS_predict_file = None
@@ -228,6 +229,7 @@ class AI2Flask:
                                     FLAGS_do_train, FLAGS_train_batch_size, FLAGS_predict_batch_size, FLAGS_learning_rate, FLAGS_num_train_epochs,
                                     FLAGS_max_answer_length, FLAGS_max_query_length, FLAGS_version_2_with_negative, questions)
                     threads_mapping[task_id] = task
+
 
                     return jsonify({"message": "Task submitted successfully", "status": "0"})
 
@@ -257,7 +259,7 @@ class AI2Flask:
                 return jsonify({'Des': str(e), 'Status': 'ERROR'})
 
     def start(self):
-        self.app.run(host="0.0.0.0", port=self.port, threaded=True)
+        self.app.run(host="0.0.0.0", port=self.port, threaded=True,debug=False)
 
 
 if __name__ == '__main__':

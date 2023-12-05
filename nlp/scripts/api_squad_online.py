@@ -47,7 +47,8 @@ class AI2Flask:
 
                     result = {}
                     for ques in questions:
-                        tmp = get_squad_feature_result(title=title, text=text, tokenizer=tokenizer_ch, question=[ques], url='http://localhost:8502/v1/models/predict:predict')
+                        tmp = get_squad_feature_result(title=title, text=text, tokenizer=tokenizer_ch, question=[ques], url='http://localhost:8502/v1/models/predict:predict') 
+
                         result[ques] = dict(tmp)[ques]
 
                     print('finished!!')
