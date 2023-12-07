@@ -1,0 +1,3 @@
+config.json
+vocab.txt
+model.ckpt
